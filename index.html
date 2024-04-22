@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .unit {
+        display: flex;
+        flex-direction: row;
+      }
+      .unitColumn {
+        width: auto;
+        display: flex;
+        flex-direction: column;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="tableUnit">
+      <div class="unit">
+        <div class="unitColumn">
+          <p>Name</p>
+          <input id="unitName" placeholder="name" />
+        </div>
+        <div class="unitColumn">
+          <p>count</p>
+          <input id="unitCount" placeholder="count" />
+        </div>
+        <div class="unitColumn">
+          <p>hp</p>
+          <input id="unitWound" placeholder="hp" />
+        </div>
+        <div class="unitColumn">
+          <p>save</p>
+          <input id="unitSave" placeholder="save" />
+        </div>
+      </div>
+
+      <div id="tableAtacks" class="tableAtacks"></div>
+      <button id="createAtack">Add Atack</button>
+      <button id="addAtack">Create Unit</button>
+      <button id="buttonStart">Create Charts Unit</button>
+    </div>
+    <!-- <div style="height: 400px; width: 400px"> -->
+    <div style="height: 400px; width: auto">
+      <canvas id="myChart"></canvas>
+    </div>
+  </body>
+
+  <!-- Chart JS -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script src="scripts.js"></script>
+</html>
