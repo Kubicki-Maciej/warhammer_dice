@@ -188,8 +188,6 @@ class AtackElement {
     this.shortName = this.crateShortName()
     this.table = "";
 
-    this.changeListenerToHit = false
-    this.changeLisenetToWound = false
 
     this.createTable()
   }
@@ -207,10 +205,10 @@ class AtackElement {
       this.AtackObject.ToWoundElementAtack.table.updateChart(numberOfAtack)
     }
   }
-  changeTableToSave(numberOfAtacks){
-
+  getValueToSave(numberOfAtack){
+    let saveValue = parseInt(this.AtackObject.inputSave.value)
+    this.AtackObject.SaveElement.table.updateSaveChart(numberOfAtack, saveValue)  
   }
-
   createTableToSave(){
     if(this.name == 'wound'){
 
@@ -228,8 +226,18 @@ class TableStatistic{
     
 
   }
+  updateSaveChart(numberOfAtacksPass, saveValue){
+    this.chart.data.labels = this.createLabels(numberOfAtacksPass)
+    this.createDiceProbabilityList(numberOfAtacksPass, saveValue)
+    this.chart.data.datasets[0].data = this.dices
+    console.log('*$*#*$#*');
+    console.log(this.dices);
+    console.log(this.labels);
+    this.chart.update()
+  }
+
   updateChart(numberAtacksPass){
-    console.log(`update chart ${this.AtackElementClass.name}`);
+    
     this.chart.data.labels = this.createLabels(numberAtacksPass)
     this.createDiceProbabilityList(numberAtacksPass, this.AtackElementClass.value)
     // this.chart.data.labels = this.createLabels(numberAtacksPass)
@@ -272,6 +280,8 @@ class TableStatistic{
               this.AtackElementClass.changeTableToWound(clickedLabelIndex)
             }
             if(this.AtackElementClass.name== 'wound'){
+              this.AtackElementClass.getValueToSave(clickedLabelIndex)
+              // this.updateSaveChart(clickedLabelIndex, saveValue)
               console.log(`${clickedLabelIndex} ataki do save`);
             }
                       
@@ -313,10 +323,7 @@ class TableStatistic{
     }
     return sumNumberOfElement
   }
-
-
 }
-
 
 class Dice{
   binomialCoefficient(n, k) {
