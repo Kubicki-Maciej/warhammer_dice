@@ -1,4 +1,63 @@
+
+// import {fraction_unit_list} from './input_script.js'
+// dodawanie nowej jednostki 
+
+
+let addUnitBtn = document.getElementById("addUnitBtn")
 let elementUnits = document.getElementById("units");
+let inputField = document.getElementById("myInput")
+
+class UnitManager{
+  constructor() {
+    this.UnitObjectLists = []
+  }
+
+  addNewUnit(unit){
+    this.UnitObjectLists.push(
+      new Unit(
+        revampAtacks(unit.table_atacks_objects),
+        unit.save,
+        unit.wounds,
+        unit.keywords_list,
+        unit.bravery,
+        unit.movement,
+        1,
+        unit.name
+      )
+    )
+  }
+}
+let UM = new UnitManager()
+
+addUnitBtn.addEventListener('click', ()=>{
+  // console.log(fractionData);
+  // elementUnits.appendChild(newElement)
+  let pickedUnit = getObjectByName(inputField.value ,fractionData.army_unit_list)
+  console.log(pickedUnit);
+  UM.addNewUnit(pickedUnit)
+
+})
+
+function getObjectByName(name, list) {
+  return list.find(obj => obj.name === name);
+}
+
+function revampAtacks(atackList){
+  let tempAtackList = []
+  atackList.forEach((atack)=>{
+    tempAtackList.push({
+      atackName: atack.atack_name,
+      toHit: parseInt(atack.to_hit),
+      toWound: parseInt(atack.to_wound),
+      toRend: parseInt(atack.rend),
+      numberOfAtacks: parseFloat(atack.atacks),
+      atackDmg: parseInt(atack.damage)
+    })
+  })
+
+  return tempAtackList
+}
+
 
 class Unit {
   // klasa glowna
@@ -20,6 +79,7 @@ class Unit {
     this.unitMove = unitMove;
     this.unitNumberOfModels = unitNumberOfModels;
     this.name = name;
+    
 
     this.listOfObjectAtacks = [];
     
@@ -55,6 +115,51 @@ class Unit {
     this.unitInformationRow.className = "unitInformationRow";
     this.unitInformation = document.createElement("div");
     this.unitInformation.className = "unitInformation";
+
+    
+    this.unitDivModelCount = document.createElement("div")
+    this.unitDivModelCount.className = "unitNumberDiv"
+
+    this.btnUnitCount = document.createElement("button")
+    this.btnUnitCount.className = "buttonSelectInput"
+    this.btnUnitCount.textContent = 'Zapisz'
+
+    this.btnUnitCount.addEventListener('click',()=>{
+        // update first table to hit
+      this.updateTableToHit()
+    })
+
+    
+    
+    this.unitDivTextModelCount = document.createElement("a")
+    this.unitDivTextModelCount.textContent = 'Ilość modeli'
+
+    this.unitInformation.appendChild(this.unitDivModelCount)
+    this.unitDivModelCount.appendChild(this.unitDivTextModelCount)
+    
+    
+
+    this.unitModelCount = document.createElement("input")
+    
+    this.unitModelCount.className = "unitModelCount"
+    this.unitModelCount.type = "number"
+    this.unitModelCount.min = "1"
+    this.unitModelCount.max = "60"
+    this.unitModelCount.value = "1"
+    
+
+    this.unitStats = document.createElement("div")
+    this.unitStats.textContent = `HP: ${this.unitHP} Save: ${this.unitSave}  Move: ${this.unitMove}  Brave ${this.unitBrave}`;
+    
+
+    this.unitDivModelCount.appendChild(this.unitDivTextModelCount)
+    this.unitDivModelCount.appendChild(this.unitModelCount)
+    this.unitDivModelCount.appendChild(this.btnUnitCount)
+
+    this.unitInformation.appendChild(this.unitStats)
+    
+    
+
     this.unitNameKeyWord = document.createElement("div");
     this.unitNameKeyWord.className = "unitNameKeyWord";
     this.unitName = document.createElement("div");
@@ -80,11 +185,17 @@ class Unit {
     elementUnits.appendChild(this.unit);
 
     this.unitName.textContent = `Name: ${this.name}`;
-    this.unitKeyword.textContent = `Keyword: ${this.keyWordsInOneLine()}`;
+    this.unitKeyword.textContent = `Keyword: ${this.unitKeyWords}`;
 
-    this.unitInformation.textContent = `HP: ${this.unitHP} Save: ${this.unitSave}  Move: ${this.unitMove}  Brave ${this.unitBrave}`;
+    
 
     // unit constructor on site
+  }
+
+  updateTableToHit(){
+    this.listOfObjectAtacks.forEach((atack)=>{
+      atack.updateAtacks()
+    })
   }
 
   keyWordsInOneLine() {
@@ -116,7 +227,7 @@ class Atack {
     this.atackDmg = unitAtack.atackDmg
     this.atackRend = unitAtack.toRend
 
-    this.numberOfAtacks = this.numberOfAtacksByWeapon()
+    this.numberOfAtacks = this.numberOfAtacksByWeapon(this.UnitObject.unitNumberOfModels)
 
     //objects
     this.ToHitElementAtack = "";
@@ -149,18 +260,19 @@ class Atack {
     this.inputSave.value = "3"
     this.AtackElementNameAndSave.appendChild(this.inputSave)
 
-    
-
-
     this.ToHitElementAtack = ''
     this.ToWoundElementAtack =''
     this.SaveElement =''
     this.convertAtack();
-
   }
 
-  numberOfAtacksByWeapon(){
-    return this.UnitObject.unitNumberOfModels * this.countAtacks
+  numberOfAtacksByWeapon(numberModels){
+    return numberModels * this.countAtacks
+  }
+
+  updateAtacks(){
+    let numberOfModels = this.UnitObject.unitModelCount.value
+    this.ToHitElementAtack.changeNumberOfAtacks(this.numberOfAtacksByWeapon(parseInt(numberOfModels)))
   }
   
   convertAtack() {
@@ -199,6 +311,10 @@ class AtackElement {
   createTable() {
     this.table = new TableStatistic(this)
   }
+  
+  changeNumberOfAtacks(numberOfAtack){
+    this.table.updateChart(numberOfAtack)
+  }
 
   changeTableToWound(numberOfAtack){
     if(this.name == 'hit'){
@@ -223,8 +339,6 @@ class TableStatistic{
     this.labels = []
     this.createTable()
     this.clickedElementIndex = NaN
-    
-
   }
   updateSaveChart(numberOfAtacksPass, saveValue){
     this.chart.data.labels = this.createLabels(numberOfAtacksPass)
@@ -253,7 +367,7 @@ class TableStatistic{
     this.canvasElementTable = document.createElement("canvas")
     this.chartDiv.appendChild(this.canvasElementTable)
     this.AtackElementClass.AtackObject.DivElementTableForTables.appendChild(this.chartDiv)
-
+    
     this.lableName = `% na wyrzucenie ilości kości dla ${this.AtackElementClass.name}`
     this.createLabels(this.AtackElementClass.AtackObject.numberOfAtacks)
 
@@ -262,6 +376,7 @@ class TableStatistic{
       type: "bar",
       data: {
         labels: this.labels,
+        
         datasets: [
           {
             label: this.lableName,
@@ -275,24 +390,36 @@ class TableStatistic{
   
           if (element.length > 0) {
             let clickedLabelIndex = element[0].index;
-            console.log(clickedLabelIndex);
+            
             if(this.AtackElementClass.name == 'hit'){
               this.AtackElementClass.changeTableToWound(clickedLabelIndex)
             }
             if(this.AtackElementClass.name== 'wound'){
               this.AtackElementClass.getValueToSave(clickedLabelIndex)
               // this.updateSaveChart(clickedLabelIndex, saveValue)
-              console.log(`${clickedLabelIndex} ataki do save`);
+              
             }
                       
           }
         },
+        
         // events: ['click'],
         scales: {
           y: {
             beginAtZero: true,
           },
         },
+        plugins:{
+          tooltip: {
+            callbacks: {
+              label: ((tooltipItem, data)=>{
+                let index = tooltipItem.dataIndex
+                return `prawdopodobieństwo wyrzucenia  conajmniej ${index} kości wynosi : ${this.sumProbability(index).toFixed(2)}
+                \n dla ${index} wynosi : ${tooltipItem.formattedValue}`
+              })
+            }
+          }
+        }
       },
     });        
   }
@@ -322,6 +449,15 @@ class TableStatistic{
       sumNumberOfElement = sumNumberOfElement + this.dices[i]
     }
     return sumNumberOfElement
+  }
+
+  sumProbability(index){
+    let summ =0
+    for(let i=index;i < this.dices.length; i++){
+      summ = summ + this.dices[i]
+    }
+    console.log(summ);
+    return summ
   }
 }
 
@@ -367,25 +503,27 @@ class Dice{
 
 
 
-let Vendicators = new Unit(
-  [
-    { atackName: "mele", toHit: 3, toWound: 3, toRend: 1, numberOfAtacks: 2, atackDmg: 1},
-    {
-      atackName: "BIGMELE",
-      toHit: 4,
-      toWound: 3,
-      toRend: 2,
-      numberOfAtacks: 1,
-      atackDmg: 2
-    },
-  ],
-  3,
-  2,
-  ["Stormcast", "Redemer"],
-  7,
-  5,
-  5,
-  "vindictaros"
-);
-console.log(Vendicators);
-// createGetter
+// let Vendicators = new Unit(
+//   [
+//     { atackName: "range", toHit: 3, toWound: 3, toRend: 2, numberOfAtacks: 1, atackDmg: 3},
+//     {
+//       atackName: "BIGMELE",
+//       toHit: 4,
+//       toWound: 3,
+//       toRend: 2,
+//       numberOfAtacks: 1,
+//       atackDmg: 2
+//     },
+//   ],
+//   3,
+//   2,
+//   ["Stormcast", "Redemer"],
+//   7,
+//   5,
+//   3,
+//   "vindictaros"
+// );
+
+
+
+ 

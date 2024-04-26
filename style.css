@@ -1,0 +1,131 @@
+/* 
+    Units
+*/
+.unit {
+  width: auto;
+  height: auto;
+  background-color: gainsboro;
+}
+
+.unitColumn {
+  width: auto;
+  display: flex;
+  flex-direction: column;
+}
+.unitInformationRow {
+  display: flex;
+  flex-direction: row;
+}
+.unitInformation {
+  display: flex;
+  flex-direction: row;
+  width: 50%;
+}
+.unitName {
+  font-size: 34px;
+}
+.unitTopBar{
+  display: flex;
+  flex-direction: row;
+}
+.atacks{
+  display: flex;
+  flex-direction: column;
+}
+.atack{
+  display: flex;
+  flex-direction: column;
+}
+.atacksTables{
+  display: flex;
+  flex-direction: row;
+}
+.tablehit{
+  width: 400px;
+  height: 300px;
+}
+.tablewound{
+  width: 400px;
+  height: 300px;
+}
+.tablesave{
+  width: 400px;
+  height: 300px;
+}
+
+@media screen and (max-width: 600px) {
+  .atacksTables{
+    flex-direction: column;
+  }
+}
+/* 
+Input 
+*/
+
+.autocomplete {
+  /*the container must be positioned relative:*/
+  position: relative;
+  display: inline-block;
+}
+input {
+  border: 1px solid transparent;
+  background-color: #f1f1f1;
+  padding: 10px;
+  font-size: 16px;
+  margin:  0 20px  0 20px; 
+}
+input[type=text] {
+  background-color: #f1f1f1;
+  width: 100%;
+}
+input[type=submit] {
+  background-color: 3498db;
+  color: #fff;
+}
+.autocomplete-items {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  /*position the autocomplete items to be the same width as the container:*/
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+.autocomplete-items div {
+  padding: 10px;
+  cursor: pointer;
+  background-color: #fff;
+  border-bottom: 1px solid #d4d4d4;
+}
+.autocomplete-items div:hover {
+  /*when hovering an item:*/
+  background-color: #e9e9e9;
+}
+.autocomplete-active {
+  /*when navigating through the items using the arrow keys:*/
+  background-color: DodgerBlue !important;
+  color: #ffffff;
+}
+.buttonSelectInput{
+  display: inline-block;
+  margin-left: 50px;
+  padding: 10px 20px;
+  background-color: #3498db;
+  color: white;
+  font-size: 16px;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s;
+}
+.buttonSelectInput:hover{
+    background-color: #2980b9;
+}
+.inputBox{
+    margin: 10px;
+}

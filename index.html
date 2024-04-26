@@ -4,66 +4,25 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <style>
-      .unit {
-        width: auto;
-        height: auto;
-        background-color: gainsboro;
-      }
-      .unitColumn {
-        width: auto;
-        display: flex;
-        flex-direction: column;
-      }
-      .unitInformationRow {
-        display: flex;
-        flex-direction: row;
-      }
-      .unitInformation {
-        display: flex;
-        flex-direction: row;
-        width: 50%;
-      }
-      .unitName {
-        font-size: 34px;
-      }
-      .unitTopBar{
-        display: flex;
-        flex-direction: row;
-      }
-      .atacks{
-        display: flex;
-        flex-direction: column;
-      }
-      .atack{
-        display: flex;
-        flex-direction: column;
-      }
-      .atacksTables{
-        display: flex;
-        flex-direction: row;
-      }
-      .tablehit{
-        width: 400px;
-        height: 300px;
-      }
-      .tablewound{
-        width: 400px;
-        height: 300px;
-      }
-      .tablesave{
-        width: 400px;
-        height: 300px;
-      }
 
-    </style>
+    <link rel="stylesheet" type="text/css" href="style.css" />
   </head>
   <body>
-    <div class="units" id="units">UNITS</div>
+
+    <div class="inputBox">
+      <div class="autocomplete" style="width:300px;">
+        <input id="myInput" type="text" name="Unit" placeholder="Nazwa jednostki">
+      </div>
+      <button type="submit" class="buttonSelectInput" id="addUnitBtn" >Dodaj</button>
+    </div>
+    
+    <div class="units" id="units"></div>
   </body>
 
   <!-- Chart JS -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
 
+  <script type="text/javascript" src="input_script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="script.js"></script>
 </html>
